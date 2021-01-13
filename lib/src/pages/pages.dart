@@ -92,19 +92,19 @@ class _PagesWidgetState extends State<PagesWidget> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Theme.of(context).accentColor,
-          selectedFontSize: 0,
-          unselectedFontSize: 0,
+          selectedFontSize: 10,
+          unselectedFontSize: 10,
           iconSize: 22,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          selectedIconTheme: IconThemeData(size: 28),
+          selectedIconTheme: IconThemeData(size: 25),
           unselectedItemColor: Theme.of(context).focusColor.withOpacity(1),
           currentIndex: widget.currentTab,
           onTap: (int i) {
             this._selectTab(i);
           },
           // this will be set when a new tab is tapped
-          items: [
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
               label: "Notifications",
@@ -112,12 +112,11 @@ class _PagesWidgetState extends State<PagesWidget> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.location_on),
-              label: "Notifications",
-              // title: new Container(height: 0.0),
+              label: "Market Place",
             ),
             BottomNavigationBarItem(
-              label: "Notifications",
-              // title: new Container(height: 0.0),
+                label: "Home",
+                // title: new Container(height: 0.0),
                 icon: Container(
                   width: 42,
                   height: 42,
@@ -142,12 +141,12 @@ class _PagesWidgetState extends State<PagesWidget> {
                 )),
             BottomNavigationBarItem(
               icon: new Icon(Icons.local_mall),
-              label: "Notifications",
+              label: "My Orders",
               // title: new Container(height: 0.0),
             ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.favorite),
-              label: "Notifications",
+              label: "Favourites",
               // title: new Container(height: 0.0),
             ),
           ],
