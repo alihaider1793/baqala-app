@@ -50,7 +50,7 @@ class PaymentMethodList {
           "assets/img/paypal.png"),
     ];
     this._cashList = [
-      new PaymentMethod("myfatoorah", "MyFatoorah", "Click here to pay via My Fatoorah",
+      new PaymentMethod("myfatoorah", "Pay via Visa/Master Card", "Click here to pay via Visa/Master Card",
           "/MyFatoorah", "assets/img/myfatoorah.png"),
       new PaymentMethod(
           "cod",
