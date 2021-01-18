@@ -78,16 +78,23 @@ Future<Stream<Product>> getProduct(String productId) async {
 }
 
 Future<Stream<Product>> searchProducts(String search, Address address) async {
+  String hour = "";
   DateTime currentDateTime = new DateTime.now();
   print('${currentDateTime.hour.toString()}:${currentDateTime.minute.toString()}');
+  if(currentDateTime.hour.toString().length == 1) {
+    hour = "0"+currentDateTime.hour.toString();
+  }
+  else {
+    hour = currentDateTime.hour.toString();
+  }
   Uri uri = Helper.getUri('api/products');
   Map<String, dynamic> _queryParams = {};
-  _queryParams['search'] = 'name:$search;description:$search';
-  _queryParams['searchFields'] = 'name:like;description:like';
+  _queryParams['search'] = 'name:$search;';
+  _queryParams['searchFields'] = 'name:like;';
   _queryParams['limit'] = '5';
   _queryParams['take'] = '30';
   _queryParams['skip'] = '0';
-  _queryParams['time'] = '${currentDateTime.hour.toString()}:${currentDateTime.minute.toString()}';
+  _queryParams['time'] = '${hour}:${currentDateTime.minute.toString()}';
   if (!address.isUnknown()) {
     _queryParams['myLon'] = address.longitude.toString();
     _queryParams['myLat'] = address.latitude.toString();
@@ -117,9 +124,17 @@ Future<Stream<Product>> searchProducts(String search, Address address) async {
 Future<Stream<Product>> getProductsByCategory(int skip, int take, categoryId) async
 {
   DateTime currentDateTime = new DateTime.now();
+  String hour = "";
+  if(currentDateTime.hour.toString().length == 1){
+    hour = "0"+currentDateTime.hour.toString();
+  }
+  else{
+    hour = currentDateTime.hour.toString();
+  }
 
   getProductsByCategoryCount(skip, take, categoryId);
   // print('getting products by category: ' + categoryId);
+
   Uri uri = Helper.getUri('api/products');
   // print('uri: ' + uri.toString());
   Map<String, dynamic> _queryParams = {};
@@ -135,7 +150,7 @@ Future<Stream<Product>> getProductsByCategory(int skip, int take, categoryId) as
   _queryParams = filter.toQuery(oldQuery: _queryParams);
   _queryParams['skip'] = '' + skip.toString();
   _queryParams['take'] = '' + take.toString();
-  _queryParams['time'] = '${currentDateTime.hour.toString()}:${currentDateTime.minute.toString()}';
+  _queryParams['time'] = '${hour}:${currentDateTime.minute.toString()}';
   // print('_queryParams: ' + _queryParams.toString());
 
   uri = uri.replace(queryParameters: _queryParams);
@@ -222,21 +237,17 @@ Future<Stream<Favorite>> getFavorites() async {
   }
   final String _apiToken = 'api_token=${_user.apiToken}&';
   final String url =
-      '${GlobalConfiguration().getString('api_base_url')}favorites?${_apiToken}with=product;product.market;user;options&search=user_id:${_user.id}&searchFields=user_id:=';
+      '${GlobalConfiguration().getString('api_base_url')}favorites?${_apiToken}with=product;user;options&search=user_id:${_user.id}&searchFields=user_id:=';
 
   final client = new http.Client();
   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));
-  print("getting favourite products: $url");
   try {
     return streamedRest.stream
         .transform(utf8.decoder)
         .transform(json.decoder)
         .map((data) => Helper.getData(data))
         .expand((data) => (data as List))
-        .map((data) {
-          print(data);
-          return Favorite.fromJSON(data);
-        });
+        .map((data) => Favorite.fromJSON(data));
   } catch (e) {
     print(CustomTrace(StackTrace.current, message: url).toString());
     return new Stream.value(new Favorite.fromJSON({}));
@@ -379,8 +390,8 @@ Future<Stream<Product>> getDiscountedProductsOfMarket(int skip, int take, String
 Future<Stream<Product>> searchProducts1(String search, Address address) async {
   Uri uri = Helper.getUri('api/products/searchMarket');
   Map<String, dynamic> _queryParams = {};
-  _queryParams['search'] = 'name:$search;description:$search';
-  _queryParams['searchFields'] = 'name:like;description:like';
+  _queryParams['search'] = 'name:$search;';
+  _queryParams['searchFields'] = 'name:like;';
   _queryParams['searchStr'] = search;
   _queryParams['marketID'] = MenuWidget.openedMarket;
   _queryParams['limit'] = '5';

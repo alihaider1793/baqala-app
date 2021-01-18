@@ -101,155 +101,167 @@ class _SearchResultWidgetState1 extends StateMVC<SearchResultWidget1> {
                 ),
               ),
             ),
-            _con.products1.isEmpty && !_con.doneSearchingProducts && _textEditingController.value.text.isNotEmpty
+            _con.markets1.isEmpty &&
+                    _con.products1.isEmpty &&
+                    !_con.doneSearchingProducts &&
+                    !_con.doneSearchingMarkets &&
+                    _textEditingController.value.text.isNotEmpty
                 ? CircularLoadingWidget(height: 288)
-                : _con.products1.isEmpty && _con.doneSearchingProducts
-                ? Text("No results found!")
-                : Expanded(
-                    child: ListView(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.symmetric(vertical: 0),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      this.layout = 'list';
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.format_list_bulleted,
-                                    color: this.layout == 'list'
-                                        ? Theme.of(context).accentColor
-                                        : Theme.of(context).focusColor,
-                                  ),
+                : _con.markets1.isEmpty &&
+                        _con.products1.isEmpty &&
+                        _con.doneSearchingProducts &&
+                        _con.doneSearchingMarkets
+                    ? Text("No results found!")
+                    : Expanded(
+                        child: ListView(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: ListTile(
+                                dense: true,
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 0),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          this.layout = 'list';
+                                        });
+                                      },
+                                      icon: Icon(
+                                        Icons.format_list_bulleted,
+                                        color: this.layout == 'list'
+                                            ? Theme.of(context).accentColor
+                                            : Theme.of(context).focusColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          this.layout = 'grid';
+                                        });
+                                      },
+                                      icon: Icon(
+                                        Icons.apps,
+                                        color: this.layout == 'grid'
+                                            ? Theme.of(context).accentColor
+                                            : Theme.of(context).focusColor,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      this.layout = 'grid';
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.apps,
-                                    color: this.layout == 'grid'
-                                        ? Theme.of(context).accentColor
-                                        : Theme.of(context).focusColor,
-                                  ),
-                                )
-                              ],
+                                title: Text(
+                                  S.of(context).products_results,
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                              ),
                             ),
-                            title: Text(
-                              S.of(context).products_results,
-                              style: Theme.of(context).textTheme.subtitle1,
+                            // ListView.separated(
+                            //   scrollDirection: Axis.vertical,
+                            //   shrinkWrap: true,
+                            //   primary: false,
+                            //   itemCount: _con.products1.length,
+                            //   separatorBuilder: (context, index) {
+                            //     return SizedBox(height: 10);
+                            //   },
+                            //   itemBuilder: (context, index) {
+                            //     return ProductItemWidget(
+                            //       heroTag: 'search_list',
+                            //       product: _con.products1.elementAt(index),
+                            //     );
+                            //   },
+                            // ),
+                            Offstage(
+                              offstage: this.layout != 'list',
+                              child: ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: _con.products1.length,
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(height: 10);
+                                },
+                                itemBuilder: (context, index) {
+                                  return ProductListItemWidget(
+                                    heroTag: 'favorites_list',
+                                    product: _con.products1.elementAt(index),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ),
-                        // ListView.separated(
-                        //   scrollDirection: Axis.vertical,
-                        //   shrinkWrap: true,
-                        //   primary: false,
-                        //   itemCount: _con.products1.length,
-                        //   separatorBuilder: (context, index) {
-                        //     return SizedBox(height: 10);
-                        //   },
-                        //   itemBuilder: (context, index) {
-                        //     return ProductItemWidget(
-                        //       heroTag: 'search_list',
-                        //       product: _con.products1.elementAt(index),
-                        //     );
-                        //   },
-                        // ),
-                        Offstage(
-                          offstage: this.layout != 'list',
-                          child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: _con.products1.length,
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 10);
-                            },
-                            itemBuilder: (context, index) {
-                              return ProductListItemWidget(
-                                heroTag: 'favorites_list',
-                                product: _con.products1.elementAt(index),
-                              );
-                            },
-                          ),
-                        ),
-                        Offstage(
-                          offstage: this.layout != 'grid',
-                          child: GridView.count(
-                            // to adjust height of grid widgets
-                            childAspectRatio:
-                                ((MediaQuery.of(context).size.width / 2) /
-                                    (Helper.getScreenHeight(context)*0.30)),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 20,
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            // Create a grid with 2 columns. If you change the scrollDirection to
-                            // horizontal, this produces 2 rows.
-                            crossAxisCount:
-                                MediaQuery.of(context).orientation ==
-                                        Orientation.portrait
-                                    ? 2
-                                    : 4,
-                            // Generate 100 widgets that display their index in the List.
-                            children:
-                                List.generate(_con.products1.length, (index) {
+                            Offstage(
+                              offstage: this.layout != 'grid',
+                              child: GridView.count(
+                                // to adjust height of grid widgets
+                                childAspectRatio:
+                                    ((MediaQuery.of(context).size.width / 2) /
+                                        (Helper.getScreenHeight(context) *
+                                            0.30)),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                primary: false,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 20,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                // Create a grid with 2 columns. If you change the scrollDirection to
+                                // horizontal, this produces 2 rows.
+                                crossAxisCount:
+                                    MediaQuery.of(context).orientation ==
+                                            Orientation.portrait
+                                        ? 2
+                                        : 4,
+                                // Generate 100 widgets that display their index in the List.
+                                children: List.generate(_con.products1.length,
+                                    (index) {
                                   print(_con.products1[index].market.name);
-                              return ProductGridItemWidget(
-                                  heroTag: 'category_grid',
-                                  product: _con.products1.elementAt(index),
-                                  onPressed: () {
-                                    if (currentUser.value.apiToken == null) {
-                                      Navigator.of(context).pushNamed('/Login');
-                                    } else {
-                                      print(
-                                          'id of selected product in search: ' +
-                                              MenuWidget.openedMarket);
-                                      if (_con.isSameMarkets(
-                                          _con.products1.elementAt(index))) {
-                                        _con.addToCart(
-                                            _con.products1.elementAt(index));
-                                      } else {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            // return object of type Dialog
-                                            return AddToCartAlertDialogWidget(
-                                                oldProduct: _con.carts
-                                                    .elementAt(0)
-                                                    ?.product,
-                                                newProduct: _con.products1
-                                                    .elementAt(index),
-                                                onPressed: (product,
-                                                    {reset: true}) {
-                                                  return _con.addToCart(
-                                                      _con.products1
-                                                          .elementAt(index),
-                                                      reset: true);
-                                                });
-                                          },
-                                        );
-                                      }
-                                    }
-                                  });
-                            }),
-                          ),
+                                  return ProductGridItemWidget(
+                                      heroTag: 'category_grid',
+                                      product: _con.products1.elementAt(index),
+                                      onPressed: () {
+                                        if (currentUser.value.apiToken ==
+                                            null) {
+                                          Navigator.of(context)
+                                              .pushNamed('/Login');
+                                        } else {
+                                          print(
+                                              'id of selected product in search: ' +
+                                                  MenuWidget.openedMarket);
+                                          if (_con.isSameMarkets(_con.products1
+                                              .elementAt(index))) {
+                                            _con.addToCart(_con.products1
+                                                .elementAt(index));
+                                          } else {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                // return object of type Dialog
+                                                return AddToCartAlertDialogWidget(
+                                                    oldProduct: _con.carts
+                                                        .elementAt(0)
+                                                        ?.product,
+                                                    newProduct: _con.products1
+                                                        .elementAt(index),
+                                                    onPressed: (product,
+                                                        {reset: true}) {
+                                                      return _con.addToCart(
+                                                          _con.products1
+                                                              .elementAt(index),
+                                                          reset: true);
+                                                    });
+                                              },
+                                            );
+                                          }
+                                        }
+                                      });
+                                }),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
           ],
         ),
       ),

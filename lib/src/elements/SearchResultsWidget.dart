@@ -46,6 +46,11 @@ class _SearchResultWidgetState extends StateMVC<SearchResultWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("in build");
+    print(_con.markets.isEmpty);
+    print(_con.products.isEmpty);
+    print(_con.doneSearchingProducts);
+    print(_con.doneSearchingMarkets);
     return LoadingOverlay(
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
