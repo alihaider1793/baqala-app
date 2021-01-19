@@ -65,6 +65,11 @@ class MarketController extends ControllerMVC {
     }, onError: (a) {}, onDone: () {});
   }
 
+  Future<void> selectCategory(List<String> categoriesId) async {
+    products.clear();
+    listenForProducts(0, 10, market.id, categoriesId: categoriesId);
+  }
+
   void listenForProducts(int skip, int take, String idMarket,
       {List<String> categoriesId}) async {
     print("fetching products");
@@ -80,12 +85,11 @@ class MarketController extends ControllerMVC {
       print("error caught");
       print(a);
     }, onDone: () {
-      if(products.isNotEmpty && products != null)
-        {
-          // market..name = products.elementAt(0)?.market?.name;
-          market..name = products.elementAt(0).market?.name;
-        }
-      setState((){
+      if (products.isNotEmpty && products != null) {
+        // market..name = products.elementAt(0)?.market?.name;
+        market..name = products.elementAt(0).market?.name;
+      }
+      setState(() {
         doneFetchingProducts = true;
       });
     });
@@ -107,15 +111,10 @@ class MarketController extends ControllerMVC {
       print(a);
     }, onDone: () {
       // market..name = products.elementAt(0)?.market?.name;
-      setState((){
+      setState(() {
         doneFetchingProducts = true;
       });
     });
-  }
-
-  Future<void> selectCategory(List<String> categoriesId) async {
-    products.clear();
-    listenForProducts(0, 10, market.id, categoriesId: categoriesId);
   }
 
   Future<void> listenForCart() async {

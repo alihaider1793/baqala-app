@@ -12,8 +12,6 @@ class CategoriesCarouselWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("in categories carousel W");
-    print(this.categories == null);
     return this.categories.isEmpty || this.categories == null
         ? CircularLoadingWidget(height: 150)
         : Container(

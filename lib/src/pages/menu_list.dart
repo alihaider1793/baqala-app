@@ -45,8 +45,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
   int skip = 0;
   int take = 10;
 
-  Future _loadData() async
-  {
+  Future _loadData() async {
     continueLoading = true;
     // perform fetching data delay
     await new Future.delayed(new Duration(seconds: 1));
@@ -56,8 +55,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
         ' skip : ' +
         (skip + take).toString());
 
-    if (skip + take > CategoryController.totalMarketProducts)
-    {
+    if (skip + take > CategoryController.totalMarketProducts) {
       print('disable the loader!');
       setState(() {
         isLoading = false;
@@ -80,8 +78,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
     _hasSpecialOffer = widget.routeArgument.marketData.specialOffer;
     print(widget.routeArgument.marketData.id);
 
-    _con.listenForCart().then((value)
-    {
+    _con.listenForCart().then((value) {
       _con.market = (new Market())..id = widget.routeArgument.id;
       MenuWidget.openedMarket = widget.routeArgument.id;
       _con.listenForTrendingProducts(widget.routeArgument.id);
@@ -234,143 +231,152 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                 ),
               ),
               Row(
-                 children: [
-                   !_hasSpecialOffer
-                       ? SizedBox(width: 0.0)
-                       :  Expanded(
-                     flex: 1,
-                     child: Padding(
-                           padding: const EdgeInsets.all(2.0),
-                           child: RawChip(
-                             elevation: 0,
-                             label: Text(
-                               "Offers",
-                               style: TextStyle(
-                                 fontWeight: FontWeight.bold,
-                               ),
-                             ),
-                             labelStyle: _isSaleTagSelected
-                                 ? Theme.of(context).textTheme.bodyText2.merge(
-                                 TextStyle(
-                                     color:
-                                     Theme.of(context).primaryColor))
-                                 : Theme.of(context).textTheme.bodyText2,
-                             padding: EdgeInsets.symmetric(
-                                 horizontal: 5, vertical: 15),
-                             backgroundColor:
-                             Theme.of(context).focusColor.withOpacity(0.1),
-                             selectedColor: Colors.red,
-                             selected: _isSaleTagSelected,
-                             //shape: StadiumBorder(side: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.05))),
-                             showCheckmark: false,
-                             onSelected: (bool value) {
-                               print("offer tapped");
-                               setState(() {
-                                 _isSaleTagSelected = !_isSaleTagSelected;
-                                 if(_isSaleTagSelected)
-                                 {
-                                   this.selectedCategories.clear();
-                                   _con.listenForDiscountedProducts(0, 10, widget.routeArgument.id);
-                                 }
-                                 else
-                                 {
-                                   this.selectedCategories = ['0'];
-                                   _con.selectCategory(this.selectedCategories);
-                                 }
-                               });
-                             },
-                           ),
+                children: [
+                  !_hasSpecialOffer
+                      ? SizedBox(width: 0.0)
+                      : Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: RawChip(
+                              isEnabled: _con.doneFetchingProducts,
+                              elevation: 0,
+                              label: Text(
+                                "Offers",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              labelStyle: _isSaleTagSelected
+                                  ? Theme.of(context).textTheme.bodyText2.merge(
+                                      TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor))
+                                  : Theme.of(context).textTheme.bodyText2,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 15),
+                              backgroundColor:
+                                  Theme.of(context).focusColor.withOpacity(0.1),
+                              selectedColor: Colors.red,
+                              selected: _isSaleTagSelected,
+                              //shape: StadiumBorder(side: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.05))),
+                              showCheckmark: false,
+                              onSelected: (bool value) {
+                                print("offer tapped");
+                                setState(() {
+                                  _isSaleTagSelected = !_isSaleTagSelected;
+                                  if (_isSaleTagSelected) {
+                                    this.selectedCategories.clear();
+                                    _con.listenForDiscountedProducts(
+                                        0, 10, widget.routeArgument.id);
+                                  } else {
+                                    this.selectedCategories = ['0'];
+                                    _con.selectCategory(
+                                        this.selectedCategories);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                  Expanded(
+                    flex: 4,
+                    child: _con.categories.isEmpty
+                        ? SizedBox(height: 90)
+                        : Container(
+                            height: 90,
+                            child: ListView(
+                              primary: false,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(_con.categories.length,
+                                  (index) {
+                                var _category =
+                                    _con.categories.elementAt(index);
+                                var _selected = this
+                                    .selectedCategories
+                                    .contains(_category.id);
+                                return Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 20),
+                                  child: RawChip(
+                                    isEnabled: _con.doneFetchingProducts,
+                                    elevation: 0,
+                                    label: Text(_category.name),
+                                    labelStyle: _selected
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .merge(TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor))
+                                        : Theme.of(context).textTheme.bodyText2,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 15),
+                                    backgroundColor: Theme.of(context)
+                                        .focusColor
+                                        .withOpacity(0.1),
+                                    selectedColor:
+                                        Theme.of(context).accentColor,
+                                    selected: _selected,
+                                    //shape: StadiumBorder(side: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.05))),
+                                    showCheckmark: false,
+                                    avatar: (_category.id == '0')
+                                        ? null
+                                        : (_category.image.url
+                                                .toLowerCase()
+                                                .endsWith('.svg')
+                                            ? SvgPicture.network(
+                                                _category.image.url,
+                                                color: _selected
+                                                    ? Theme.of(context)
+                                                        .primaryColor
+                                                    : Theme.of(context)
+                                                        .accentColor,
+                                              )
+                                            : CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                imageUrl: _category.image.icon,
+                                                placeholder: (context, url) =>
+                                                    Image.asset(
+                                                  'assets/img/loading.gif',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              )),
+                                    onSelected: (bool value) {
+                                      setState(() {
+                                        _isSaleTagSelected = false;
+                                        if (_category.id == '0') {
+                                          this.selectedCategories = ['0'];
+                                        } else {
+                                          this.selectedCategories.removeWhere(
+                                              (element) => element == '0');
+                                        }
 
-                         ),
-                   ),
-                   Expanded(
-                     flex: 4,
-                     child: _con.categories.isEmpty
-                         ? SizedBox(height: 90)
-                         : Container(
-                       height: 90,
-                       child: ListView(
-                         primary: false,
-                         shrinkWrap: true,
-                         scrollDirection: Axis.horizontal,
-                         children:
-                         List.generate(_con.categories.length, (index) {
-                           var _category = _con.categories.elementAt(index);
-                           var _selected =
-                           this.selectedCategories.contains(_category.id);
-                           return Padding(
-                             padding:
-                             const EdgeInsetsDirectional.only(start: 20),
-                             child: RawChip(
-                               elevation: 0,
-                               label: Text(_category.name),
-                               labelStyle: _selected
-                                   ? Theme.of(context).textTheme.bodyText2.merge(
-                                   TextStyle(
-                                       color:
-                                       Theme.of(context).primaryColor))
-                                   : Theme.of(context).textTheme.bodyText2,
-                               padding: EdgeInsets.symmetric(
-                                   horizontal: 12, vertical: 15),
-                               backgroundColor:
-                               Theme.of(context).focusColor.withOpacity(0.1),
-                               selectedColor: Theme.of(context).accentColor,
-                               selected: _selected,
-                               //shape: StadiumBorder(side: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.05))),
-                               showCheckmark: false,
-                               avatar: (_category.id == '0')
-                                   ? null
-                                   : (_category.image.url
-                                   .toLowerCase()
-                                   .endsWith('.svg')
-                                   ? SvgPicture.network(
-                                 _category.image.url,
-                                 color: _selected
-                                     ? Theme.of(context).primaryColor
-                                     : Theme.of(context).accentColor,
-                               )
-                                   : CachedNetworkImage(
-                                 fit: BoxFit.cover,
-                                 imageUrl: _category.image.icon,
-                                 placeholder: (context, url) =>
-                                     Image.asset(
-                                       'assets/img/loading.gif',
-                                       fit: BoxFit.cover,
-                                     ),
-                                 errorWidget: (context, url, error) =>
-                                     Icon(Icons.error),
-                               )),
-                               onSelected: (bool value) {
-                                 setState(() {
-                                   _isSaleTagSelected = false;
-                                   if (_category.id == '0')
-                                   {
-                                     this.selectedCategories = ['0'];
-                                   }
-                                   else
-                                   {
-                                     this.selectedCategories.removeWhere(
-                                             (element) => element == '0');
-                                   }
-
-                                   if (value) {
-                                     this.selectedCategories.add(_category.id);
-                                   } else {
-                                     this.selectedCategories.removeWhere(
-                                             (element) => element == _category.id);
-                                   }
-                                   _con.selectCategory(this.selectedCategories);
-                                 });
-                               },
-                             ),
-                           );
-                         }),
-                       ),
-                     ),
-                   ),
-                 ],
+                                        if (value) {
+                                          this
+                                              .selectedCategories
+                                              .add(_category.id);
+                                        } else {
+                                          this.selectedCategories.removeWhere(
+                                              (element) =>
+                                                  element == _category.id);
+                                        }
+                                        _con.selectCategory(
+                                            this.selectedCategories);
+                                      });
+                                    },
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                  ),
+                ],
               ),
-
               _con.products.isEmpty
                   ? SizedBox(height: 0)
                   : Padding(
@@ -399,68 +405,78 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
               Padding(
                 padding: const EdgeInsets.all(0),
                 child: _con.products.isEmpty && !_con.doneFetchingProducts
-                    ? CircularLoadingWidget(height: 250)
+                    ? Column(
+                        children: [
+                          CircularLoadingWidget(height: 50),
+                          SizedBox(height: 15.0),
+                          Text("Fetching products...")
+                        ],
+                      )
                     : _con.products.isEmpty && _con.doneFetchingProducts
-                    ? Center(child: Text("${S.of(context).noProductFound}"),)
-                    : Offstage(
-                        offstage: this.layout != 'grid',
-                        child: GridView.count(
-                          // to adjust height of grid widgets
-                          childAspectRatio:
-                              ((MediaQuery.of(context).size.width / 2) /
-                                  (Helper.getScreenHeight(context)*0.30)),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          primary: false,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 20,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          // Create a grid with 2 columns. If you change the scrollDirection to
-                          // horizontal, this produces 2 rows.
-                          crossAxisCount: MediaQuery.of(context).orientation ==
-                                  Orientation.portrait
-                              ? 2
-                              : 4,
-                          // Generate 100 widgets that display their index in the List.
-                          children:
-                              List.generate(_con.products.length, (index) {
-                            return ProductGridItemWidget(
-                                heroTag: 'category_grid',
-                                product: _con.products.elementAt(index),
-                                onPressed: () {
-                                  if (currentUser.value.apiToken == null) {
-                                    Navigator.of(context).pushNamed('/Login');
-                                  } else {
-                                    if (_con.isSameMarkets(
-                                        _con.products.elementAt(index))) {
-                                      _con.addToCart(
-                                          _con.products.elementAt(index));
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          // return object of type Dialog
-                                          return AddToCartAlertDialogWidget(
-                                              oldProduct: _con.carts
-                                                  .elementAt(0)
-                                                  ?.product,
-                                              newProduct: _con.products
-                                                  .elementAt(index),
-                                              onPressed: (product,
-                                                  {reset: true}) {
-                                                return _con.addToCart(
-                                                    _con.products
-                                                        .elementAt(index),
-                                                    reset: true);
-                                              });
-                                        },
-                                      );
-                                    }
-                                  }
-                                });
-                          }),
-                        ),
-                      ),
+                        ? Center(
+                            child: Text("${S.of(context).noProductFound}"),
+                          )
+                        : Offstage(
+                            offstage: this.layout != 'grid',
+                            child: GridView.count(
+                              // to adjust height of grid widgets
+                              childAspectRatio:
+                                  ((MediaQuery.of(context).size.width / 2) /
+                                      (Helper.getScreenHeight(context) * 0.30)),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              primary: false,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 20,
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              // Create a grid with 2 columns. If you change the scrollDirection to
+                              // horizontal, this produces 2 rows.
+                              crossAxisCount:
+                                  MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? 2
+                                      : 4,
+                              // Generate 100 widgets that display their index in the List.
+                              children:
+                                  List.generate(_con.products.length, (index) {
+                                return ProductGridItemWidget(
+                                    heroTag: 'category_grid',
+                                    product: _con.products.elementAt(index),
+                                    onPressed: () {
+                                      if (currentUser.value.apiToken == null) {
+                                        Navigator.of(context)
+                                            .pushNamed('/Login');
+                                      } else {
+                                        if (_con.isSameMarkets(
+                                            _con.products.elementAt(index))) {
+                                          _con.addToCart(
+                                              _con.products.elementAt(index));
+                                        } else {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              // return object of type Dialog
+                                              return AddToCartAlertDialogWidget(
+                                                  oldProduct: _con.carts
+                                                      .elementAt(0)
+                                                      ?.product,
+                                                  newProduct: _con.products
+                                                      .elementAt(index),
+                                                  onPressed: (product,
+                                                      {reset: true}) {
+                                                    return _con.addToCart(
+                                                        _con.products
+                                                            .elementAt(index),
+                                                        reset: true);
+                                                  });
+                                            },
+                                          );
+                                        }
+                                      }
+                                    });
+                              }),
+                            ),
+                          ),
               ),
               continueLoading
                   ? Container(

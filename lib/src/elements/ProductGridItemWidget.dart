@@ -37,11 +37,6 @@ class _ProductGridItemWidgetState extends State<ProductGridItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("in grid view");
-    print(widget.product == null);
-    print(widget.product.discountPriceForGLView);
-    print(widget.product.discountPrice);
-    print(widget.product.price);
     return InkWell(
       highlightColor: Colors.transparent,
       splashColor: Theme.of(context).accentColor.withOpacity(0.08),
@@ -97,20 +92,26 @@ class _ProductGridItemWidgetState extends State<ProductGridItemWidget> {
                       SizedBox(height: 2),
                       Row(
                         children: [
-                          Text(
-                            "${widget.product.capacity}-${widget.product.unit}",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                          Spacer(),
                           Expanded(
+                            flex: 1,
                             child: Container(
-                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "${widget.product.capacity}-${widget.product.unit}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ),
+                          ),
+                          // Spacer(),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              // alignment: Alignment.centerRight,
                               child: !_isDiscounted
                                   ? Text(
                                       setting.value?.defaultCurrency +
-                                          "${widget.product.price.toStringAsFixed(1)}",
+                                          "${widget.product.price.toStringAsFixed(2)}",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
@@ -121,6 +122,7 @@ class _ProductGridItemWidgetState extends State<ProductGridItemWidget> {
                                   : Row(
                                       children: [
                                         Expanded(
+                                          flex: 1,
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: Colors.red,
@@ -128,11 +130,13 @@ class _ProductGridItemWidgetState extends State<ProductGridItemWidget> {
                                                   BorderRadius.circular(5),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(2.0),
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
                                               child: Text(
                                                 setting.value?.defaultCurrency +
-                                                    "${widget.product.discountPriceForGLView.toStringAsFixed(1)}",
+                                                    "${widget.product.discountPriceForGLView.toStringAsFixed(2)}",
                                                 overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -144,10 +148,12 @@ class _ProductGridItemWidgetState extends State<ProductGridItemWidget> {
                                         ),
                                         SizedBox(width: 2.0),
                                         Expanded(
+                                          flex: 1,
                                           child: Text(
                                             setting.value?.defaultCurrency +
-                                                "${widget.product.priceForGLView.toStringAsFixed(1)}",
+                                                "${widget.product.priceForGLView.toStringAsFixed(2)}",
                                             overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.end,
                                             style: TextStyle(
                                               decoration:
                                                   TextDecoration.lineThrough,

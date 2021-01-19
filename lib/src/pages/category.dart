@@ -206,7 +206,8 @@ class _CategoryWidgetState extends StateMVC<CategoryWidget> {
                 Padding(
                   padding: const EdgeInsets.only(left: 0, right: 0),
                   child: _con.products.isEmpty
-                      ? CircularLoadingWidget(height: 500)
+                      ? SizedBox(height: 0.0)
+                      // CircularLoadingWidget(height: 50)
                       : Offstage(
                           offstage: this.layout != 'list',
                           child: ListView.separated(
@@ -229,14 +230,20 @@ class _CategoryWidgetState extends StateMVC<CategoryWidget> {
                 Padding(
                   padding: const EdgeInsets.all(0),
                   child: _con.products.isEmpty
-                      ? CircularLoadingWidget(height: 500)
+                      ? Column(
+                          children: [
+                            CircularLoadingWidget(height: 50),
+                            SizedBox(height: 15.0),
+                            Text("Fetching products...")
+                          ],
+                        )
                       : Offstage(
                           offstage: this.layout != 'grid',
                           child: GridView.count(
                             // to adjust height of grid widgets
                             childAspectRatio:
                                 ((MediaQuery.of(context).size.width / 2) /
-                                    (Helper.getScreenHeight(context)*0.30)),
+                                    (Helper.getScreenHeight(context) * 0.30)),
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             primary: false,
@@ -291,17 +298,15 @@ class _CategoryWidgetState extends StateMVC<CategoryWidget> {
                           ),
                         ),
                 ),
-                CategoryController.noProducts && _con.products.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(50),
-                        child: Text('NO PRODUCTS IN THIS CATEGORY!'))
-                    : Container(
-                        height: isLoading ? 50.0 : 0,
-                        color: Colors.transparent,
-                        child: Center(
-                          child: new CircularProgressIndicator(),
-                        ),
-                      ),
+                // CategoryController.noProducts && _con.products.isEmpty
+                //     ? Padding(
+                //         padding: const EdgeInsets.all(50),
+                //         child: Text('NO PRODUCTS IN THIS CATEGORY!'))
+                //     : Container(
+                //         height: isLoading ? 50.0 : 0,
+                //         color: Colors.transparent,
+                //         child: SizedBox(height: 0.0),
+                //       ),
               ],
             ),
           ),
