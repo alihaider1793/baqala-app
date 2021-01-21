@@ -17,15 +17,16 @@ class SearchController1 extends ControllerMVC {
   List<Market> markets1 = <Market>[];
   List<Product> products1 = <Product>[];
 
+  bool doneSearchingProducts = false;
+  bool doneSearchingMarkets = false;
+
   List<Cart> carts = [];
   bool loadCart = false;
   GlobalKey<ScaffoldState> scaffoldKey;
 
-  bool doneSearchingProducts = false;
-
   SearchController1() {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
-    // listenForProducts1();
+    listenForProducts1();
   }
 
   Future<void> listenForCart() async {
@@ -118,6 +119,7 @@ class SearchController1 extends ControllerMVC {
 
   void listenForProducts1({String search}) async {
     doneSearchingProducts = false;
+    doneSearchingMarkets = false;
     if (search == null || search.isEmpty) {
       // search = await getRecentSearch();
     }
@@ -128,15 +130,17 @@ class SearchController1 extends ControllerMVC {
     }, onError: (a) {
       print(a);
     }, onDone: () {
-      print('product searched: ' + products1.toString());
-      setState((){
+      setState(() {
         doneSearchingProducts = true;
+        doneSearchingMarkets = true;
       });
+      print('product searched: ' + products1.toString());
     });
   }
 
   Future<void> refreshSearch1(search) async {
     setState(() {
+      doneSearchingMarkets = false;
       doneSearchingProducts = false;
       markets1 = <Market>[];
       products1 = <Product>[];

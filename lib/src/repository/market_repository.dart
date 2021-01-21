@@ -106,8 +106,8 @@ Future<Stream<Market>> getPopularMarkets(Address myLocation) async {
 Future<Stream<Market>> searchMarkets(String search, Address address) async {
   Uri uri = Helper.getUri('api/markets');
   Map<String, dynamic> _queryParams = {};
-  _queryParams['search'] = 'name:$search;description:$search';
-  _queryParams['searchFields'] = 'name:like;description:like';
+  _queryParams['search'] = 'name:$search';
+  _queryParams['searchFields'] = 'name:like;';
   _queryParams['limit'] = '5';
   if (!address.isUnknown()) {
     _queryParams['myLon'] = address.longitude.toString();
