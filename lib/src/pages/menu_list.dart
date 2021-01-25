@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:markets/src/helpers/helper.dart';
@@ -65,8 +66,18 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
 
     // update data and loading status
     skip += take;
+
+    // Map paramMap = Map();
+    // paramMap['skip'] = skip;
+    // paramMap['take'] = 10;
+    // paramMap['marketId'] = widget.routeArgument.id;
+    // paramMap['categoriesId'] = this.selectedCategories;
+
+    // compute(_con.listenForProductsInDiffThread, paramMap);
+
     _con.listenForProducts(skip, 10, widget.routeArgument.id,
         categoriesId: this.selectedCategories);
+
     setState(() {
       isLoading = false;
       continueLoading = false;
@@ -76,7 +87,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
   @override
   void initState() {
     _hasSpecialOffer = widget.routeArgument.marketData.specialOffer;
-    print(widget.routeArgument.marketData.id);
+    // print(widget.routeArgument.marketData.id);
 
     _con.listenForCart().then((value) {
       _con.market = (new Market())..id = widget.routeArgument.id;

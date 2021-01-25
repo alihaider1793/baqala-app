@@ -66,11 +66,11 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
     );
     setMessage('logEvent succeeded');
 
-    print("Analytics: product name is ${widget.routeArgument.product.name}");
-    print(
-        "Analytics: product market name is ${widget.routeArgument.product.market.name}");
-    print("Analytics: func executed");
-    print("Current user data: ${currentUser.value.name}");
+    // print("Analytics: product name is ${widget.routeArgument.product.name}");
+    // print(
+    //     "Analytics: product market name is ${widget.routeArgument.product.market.name}");
+    // print("Analytics: func executed");
+    // print("Current user data: ${currentUser.value.name}");
   }
 
   @override
@@ -113,7 +113,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                               tag: widget.routeArgument.heroTag ??
                                   '' + _con.product.id,
                               child: CachedNetworkImage(
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                                 imageUrl: _con.product.image.url,
                                 placeholder: (context, url) => Image.asset(
                                   'assets/img/loading.gif',

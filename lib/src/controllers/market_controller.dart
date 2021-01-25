@@ -95,6 +95,34 @@ class MarketController extends ControllerMVC {
     });
   }
 
+  void listenForProductsInDiffThread(Map map) async {
+    int skip = map['skip'];
+    int take = map['take'];
+    String idMarket = map['marketId'];
+    List<String> categoriesId = map['categoriesId'];
+    print("fetching products");
+    doneFetchingProducts = false;
+    final Stream<Product> stream = await getProductsOfMarket(
+        skip, take, idMarket,
+        categories: categoriesId);
+    stream.listen((Product _product) {
+      setState(() {
+        products.add(_product);
+      });
+    }, onError: (a) {
+      print("error caught");
+      print(a);
+    }, onDone: () {
+      if (products.isNotEmpty && products != null) {
+        // market..name = products.elementAt(0)?.market?.name;
+        market..name = products.elementAt(0).market?.name;
+      }
+      setState(() {
+        doneFetchingProducts = true;
+      });
+    });
+  }
+
   void listenForDiscountedProducts(int skip, int take, String idMarket,
       {List<String> categoriesId}) async {
     products.clear();
